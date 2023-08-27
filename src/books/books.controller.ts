@@ -7,9 +7,11 @@ import {
   Param,
   ParseUUIDPipe,
   Post,
+  Put,
 } from '@nestjs/common';
 import { BooksService } from './books.service';
 import { CreateBookDTO } from './dtos/create-book.dto';
+import { UpdateBookDTO } from './dtos/update-book.dto';
 
 @Controller('books')
 export class BooksController {
@@ -33,11 +35,24 @@ export class BooksController {
     if (!(await this.booksService.getById(id))) {
       throw new NotFoundException('Book not found');
     }
-    return this.booksService.delete(id);
+    await this.booksService.delete(id);
+    return { success: true };
   }
 
   @Post('/')
   create(@Body() bookData: CreateBookDTO) {
     return this.booksService.create(bookData);
+  }
+
+  @Put('/:id')
+  async edit(
+    @Param('id', new ParseUUIDPipe()) id: string,
+    @Body() bookData: UpdateBookDTO,
+  ) {
+    if (!(await this.booksService.getById(id))) {
+      throw new NotFoundException('Book not found');
+    }
+    await this.booksService.edit(id, bookData);
+    return { success: true };
   }
 }
