@@ -33,6 +33,7 @@ export class BooksController {
   }
 
   @Delete('/:id')
+  @UseGuards(JwtAuthGuard)
   async delete(@Param('id', new ParseUUIDPipe()) id: string) {
     if (!(await this.booksService.getById(id))) {
       throw new NotFoundException('Book not found');
@@ -48,6 +49,7 @@ export class BooksController {
   }
 
   @Put('/:id')
+  @UseGuards(JwtAuthGuard)
   async edit(
     @Param('id', new ParseUUIDPipe()) id: string,
     @Body() bookData: UpdateBookDTO,
