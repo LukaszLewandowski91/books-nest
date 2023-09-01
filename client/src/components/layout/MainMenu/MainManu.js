@@ -1,7 +1,5 @@
 import { Navbar, Nav } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { getUser } from '../../../redux/usersRedux';
 import { useCookies } from 'react-cookie';
 
 const MainMenu = () => {
