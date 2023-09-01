@@ -24,11 +24,11 @@ export class AuthController {
   @UseGuards(LocalAuthGuard)
   @Post('/login')
   async login(@Request() req, @Response() res) {
+    console.log(req.user);
     const tokens = await this.authService.createSession(req.user);
     res.cookie('auth', tokens, { httpOnly: true });
-    res.send({
-      message: 'success',
-    });
+    res.cookie('login', req.user.email);
+    res.send({ email: req.user.email, id: req.user.id });
   }
 
   @UseGuards(JwtAuthGuard)
