@@ -35,6 +35,19 @@ export const loadLoggedUser = (userData) => {
   };
 };
 
+export const registerUser = (userData) => {
+  console.log(userData);
+  return async (dispatch) => {
+    try {
+      await axios.post(`${API_URL}/auth/register`, userData, {
+        withCredentials: true,
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  };
+};
+
 export const logoutUser = () => {
   return async (dispatch) => {
     try {
@@ -47,11 +60,6 @@ export const logoutUser = () => {
     }
   };
 };
-
-// const initialState = {
-//   data: [],
-//   requests: [],
-// };
 
 const usersReducer = (statePart = initialState, action) => {
   switch (action.type) {
