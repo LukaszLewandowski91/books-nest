@@ -43,6 +43,7 @@ const Register = () => {
             variant="standard"
             label="Email"
             style={formStyle}
+            required
             onChange={(e) => setEmail(e.target.value)}
           />
           <TextField

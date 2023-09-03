@@ -1,78 +1,95 @@
 import { useState } from 'react';
-import { Form, Button, Alert, Spinner } from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
+import { Alert } from 'react-bootstrap';
 import {
-  getRequest,
-  loadLoggedUser,
-  logIn,
-  LOG_IN,
-} from '../../../redux/usersRedux';
+  Avatar,
+  Grid,
+  Paper,
+  Typography,
+  TextField,
+  Button,
+} from '@mui/material';
+import { useDispatch, useSelector } from 'react-redux';
+import { getRequest, loadLoggedUser, LOG_IN } from '../../../redux/usersRedux';
 import { useNavigate } from 'react-router-dom';
+import styles from './Login.module.scss';
+import LoginIcon from '@mui/icons-material/Login';
+
 const Login = () => {
   const dispatch = useDispatch();
   const request = useSelector((state) => getRequest(state, LOG_IN));
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [status, setStatus] = useState(null); // null, loading, success, serverError, clientError
   const navigate = useNavigate();
-  const handleSubmit = (e) => {
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // setStatus('loading');
-    dispatch(loadLoggedUser({ email, password }));
+    let res = await dispatch(loadLoggedUser({ email, password }));
+
+    if (res && res.status === 201) {
+      setTimeout(() => {
+        navigate('/');
+      }, 1500);
+    }
   };
 
-  if (request) {
-    console.log(request);
-  }
+  const avatarStyle = { backgroundColor: '#1bbd7e' };
+  const formStyle = { margin: '5px auto' };
   return (
-    <Form className="col-12 col-sm-3 mx-auto" onSubmit={handleSubmit}>
-      <h1 className="my-4">Login</h1>
+    <Grid>
+      <Paper elevation={20} className={styles.paperStyle}>
+        <Grid align="center">
+          <Avatar style={avatarStyle}>
+            <LoginIcon />
+          </Avatar>
+          <h2 className={styles.headerStyle}>Sign In</h2>
+          <Typography variant="caption">
+            Please fill this form to create an account
+          </Typography>
+        </Grid>
+        <form className={styles.formStyle} onSubmit={handleSubmit}>
+          {request && request.success && (
+            <Alert variant="success">
+              <Alert.Heading>Success !</Alert.Heading>
+              <p>You have been successfully logged in.</p>
+            </Alert>
+          )}
 
-      {request && request.success && (
-        <Alert variant="success">
-          <Alert.Heading>Success !</Alert.Heading>
-          <p>You have been successfully logged in.</p>
-        </Alert>
-      )}
+          {request && request.error === 401 && (
+            <Alert variant="danger">
+              <Alert.Heading>Zly login lub haslo</Alert.Heading>
+              <p>Unexpected error... Try again</p>
+            </Alert>
+          )}
 
-      {request && request.error && (
-        <Alert variant="danger">
-          <Alert.Heading>Something went wrong...</Alert.Heading>
-          <p>Unexpected error... Try again</p>
-        </Alert>
-      )}
-
-      {request && request.pending && (
-        <Alert variant="success">
-          <Alert.Heading>Success !</Alert.Heading>
-          <p>You have been successfully logged in.</p>
-        </Alert>
-      )}
-      <Form.Group className="mb-3" controlId="formLogin">
-        <Form.Label>Login</Form.Label>
-        <Form.Control
-          type="text"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="Enter login"
-        />
-      </Form.Group>
-
-      <Form.Group className="mb-3" controlId="formPassword">
-        <Form.Label>Password</Form.Label>
-        <Form.Control
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="Enter password"
-        />
-      </Form.Group>
-
-      <Button variant="primary" type="submit">
-        Sign In
-      </Button>
-    </Form>
+          {request && request.pending && (
+            <Alert variant="success">
+              <Alert.Heading>Success !</Alert.Heading>
+              <p>You have been successfully logged in.</p>
+            </Alert>
+          )}
+          <TextField
+            fullWidth
+            variant="standard"
+            label="Email"
+            style={formStyle}
+            required
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <TextField
+            fullWidth
+            variant="standard"
+            label="Password"
+            type="password"
+            style={formStyle}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <Button variant="contained" type="submit" style={formStyle}>
+            Sign In
+          </Button>
+        </form>
+      </Paper>
+    </Grid>
   );
 };
 

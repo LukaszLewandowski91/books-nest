@@ -10,7 +10,7 @@ const MainMenu = () => {
     <Navbar bg="dark" data-bs-theme="dark">
       <Navbar.Brand>
         <Link to="/" className="text-white-50">
-          Ads App
+          Books App
         </Link>
       </Navbar.Brand>
       <Navbar.Toggle />

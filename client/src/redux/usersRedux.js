@@ -29,14 +29,14 @@ export const loadLoggedUser = (userData) => {
       });
       dispatch(logIn(res.data));
       dispatch(endRequest({ name: LOG_IN }));
+      return res;
     } catch (e) {
-      dispatch(errorRequest({ name: LOG_IN, error: e.message }));
+      dispatch(errorRequest({ name: LOG_IN, error: e.response.status }));
     }
   };
 };
 
 export const registerUser = (userData) => {
-  console.log(userData);
   return async (dispatch) => {
     try {
       await axios.post(`${API_URL}/auth/register`, userData, {
@@ -66,7 +66,7 @@ const usersReducer = (statePart = initialState, action) => {
     case LOG_IN:
       return action.payload;
     case LOG_OUT:
-      return null;
+      return initialState;
     case START_REQUEST:
       return {
         ...statePart,
@@ -90,7 +90,7 @@ const usersReducer = (statePart = initialState, action) => {
           ...statePart.requests,
           [action.payload.name]: {
             pending: false,
-            error: true,
+            error: action.payload.error,
             success: false,
           },
         },
