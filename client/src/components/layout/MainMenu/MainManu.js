@@ -9,37 +9,29 @@ const MainMenu = () => {
   return (
     <Navbar bg="dark" data-bs-theme="dark">
       <Navbar.Brand>
-        <Link to="/" className="text-white-50">
+        <Nav.Link as={Link} to={'/'}>
           Books App
-        </Link>
+        </Nav.Link>
       </Navbar.Brand>
       <Navbar.Toggle />
       <Navbar.Collapse className="justify-content-end">
         <Nav>
-          <Nav.Link>
-            <Link to="/" className="text-white-50">
-              Home
-            </Link>
+          <Nav.Link as={Link} to={'/'}>
+            Home
           </Nav.Link>
           {!user && (
-            <Nav.Link>
-              <Link to="/login" className="text-white-50">
-                Sign In
-              </Link>
+            <Nav.Link as={Link} to={'/login'}>
+              Login
             </Nav.Link>
           )}
           {user && (
-            <Nav.Link>
-              <Link to="/logout" className="text-white-50">
-                Sign Out
-              </Link>
+            <Nav.Link as={Link} to={'/logout'}>
+              Logout
             </Nav.Link>
           )}
           {!user && (
-            <Nav.Link>
-              <Link to="/register" className="text-white-50">
-                Sign Up
-              </Link>
+            <Nav.Link as={Link} to={'/register'}>
+              Sign Up
             </Nav.Link>
           )}
         </Nav>

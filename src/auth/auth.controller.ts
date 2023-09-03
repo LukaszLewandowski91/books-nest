@@ -27,7 +27,11 @@ export class AuthController {
     console.log(req.user);
     const tokens = await this.authService.createSession(req.user);
     res.cookie('auth', tokens, { httpOnly: true });
-    res.cookie('login', { email: req.user.email, id: req.user.id });
+    res.cookie('login', {
+      email: req.user.email,
+      id: req.user.id,
+      role: req.user.role,
+    });
     res.send({ email: req.user.email, id: req.user.id });
   }
 
